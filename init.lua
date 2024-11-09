@@ -120,7 +120,7 @@ local plugins = {
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function()
 			require("lualine").setup({
-				options = { 
+				options = {
 					icons_enabled = true,
 					theme = "tokyonight",
 					component_separators = { left = "", right = "" },
@@ -220,6 +220,7 @@ local plugins = {
 	{
 		"hrsh7th/nvim-cmp",
 	},
+	{ "sindrets/diffview.nvim" },
 	{
 		"nvimtools/none-ls.nvim",
 		event = { "BufReadPre", "BufNewFile" },
