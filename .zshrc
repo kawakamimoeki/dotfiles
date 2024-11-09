@@ -21,3 +21,12 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle rupa/z z.sh
 
 eval "$(starship init zsh)"
+
+# fzf history
+function fzf-select-history() {
+    BUFFER=$(history -n -r 1 | fzf --query "$LBUFFER" --reverse)
+    CURSOR=$#BUFFER
+    zle reset-prompt
+}
+zle -N fzf-select-history
+bindkey '^r' fzf-select-history
