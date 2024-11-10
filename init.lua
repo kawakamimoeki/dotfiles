@@ -6,6 +6,37 @@ vim.cmd("set number")
 vim.cmd("set clipboard=unnamedplus")
 vim.g.mapleader = " "
 
+local function run_rspec_in_tmux(command)
+	local tmux_command = string.format("tmux split-window -h 'cd %s && %s; $SHELL'", vim.fn.getcwd(), command)
+	vim.fn.system(tmux_command)
+end
+
+local function run_rspec(target_type)
+	local commands = {
+		file = "bundle exec rspec " .. vim.fn.expand("%"),
+		line = "bundle exec rspec " .. vim.fn.expand("%") .. ":" .. vim.fn.line("."),
+		suite = "bundle exec rspec",
+	}
+
+	local command = commands[target_type]
+	if command then
+		vim.g.last_rspec_command = command
+		run_rspec_in_tmux(command)
+	end
+end
+
+vim.keymap.set("n", "<Leader>rf", function()
+	run_rspec("file")
+end)
+
+vim.keymap.set("n", "<Leader>rl", function()
+	run_rspec("line")
+end)
+
+vim.keymap.set("n", "<Leader>ra", function()
+	run_rspec("suite")
+end)
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -316,7 +347,24 @@ local plugins = {
 				filetypes = { "markdown", "markdown.mdx" },
 				root_dir = require("lspconfig.util").root_pattern(".git", ".marksman.toml"),
 			})
-			require("lspconfig").tsserver.setup({
+			require("lspconfig").rubocop.setup({})
+			require("lspconfig").solargraph.setup({
+				capabilities = capabilities,
+				filetypes = { "ruby" },
+				root_dir = require("lspconfig.util").root_pattern(".git"),
+				on_attach = function(client, bufnr)
+					local opts = { noremap = true, silent = true, buffer = bufnr }
+					vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+					vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+					vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+					vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+					vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
+					vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, opts)
+					vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+				end,
+			})
+			require("lspconfig").ts_ls.setup({
 				capabilities = capabilities,
 				on_attach = function(client, bufnr)
 					local opts = { noremap = true, silent = true, buffer = bufnr }
@@ -376,7 +424,7 @@ local opts = {}
 require("lazy").setup(plugins, opts)
 
 local builtin = require("telescope.builtin")
-vim.keymap.set("n", "<C-p>", builtin.find_files, {})
+vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
 vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
 
 local configs = require("nvim-treesitter.configs")
