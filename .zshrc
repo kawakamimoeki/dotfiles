@@ -40,3 +40,5 @@ eval "$(nodenv init -)"
 source <(fzf --zsh)
 source ~/fzf-git.sh/fzf-git.sh
 
+source /Users/kawakami/git-fuzzy
+source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh

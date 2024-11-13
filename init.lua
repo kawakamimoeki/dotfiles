@@ -54,6 +54,14 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local plugins = {
+	{ "cohama/lexima.vim" },
+	{
+		"FabijanZulj/blame.nvim",
+		lazy = false,
+		config = function()
+			require("blame").setup({})
+		end,
+	},
 	{
 		"lewis6991/gitsigns.nvim",
 		event = { "BufReadPre", "BufNewFile" },
@@ -80,7 +88,7 @@ local plugins = {
 				current_line_blame_opts = {
 					virt_text = true,
 					virt_text_pos = "eol",
-					delay = 1000,
+					delay = 0,
 					ignore_whitespace = false,
 				},
 				current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
@@ -145,6 +153,15 @@ local plugins = {
 					map("n", "<leader>td", gs.toggle_deleted)
 				end,
 			})
+		end,
+	},
+	{
+		"ibhagwan/fzf-lua",
+		-- optional for icon support
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		config = function()
+			-- calling `setup` is optional for customization
+			require("fzf-lua").setup({})
 		end,
 	},
 	{
@@ -426,6 +443,7 @@ require("lazy").setup(plugins, opts)
 local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
 vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
+vim.keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>")
 
 local configs = require("nvim-treesitter.configs")
 
@@ -433,6 +451,7 @@ configs.setup({
 	ensure_installed = { "lua", "ruby", "javascript", "html" },
 	highlight = { enable = true },
 	indent = { enable = true },
+	endwise = { enable = true },
 })
 vim.opt.termguicolors = true
 vim.opt.background = "dark"
