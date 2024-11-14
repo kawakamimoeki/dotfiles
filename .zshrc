@@ -36,9 +36,10 @@ bindkey '^r' fzf-select-history
 export PATH="$HOME/.rbenv/bin:$PATH" 
 eval "$(rbenv init - zsh)"
 export PATH="$HOME/.nodenv/bin:$PATH"
+alias firefox="/Applications/Firefox.app/Contents/MacOS/firefox"
 eval "$(nodenv init -)"
 source <(fzf --zsh)
 source ~/fzf-git.sh/fzf-git.sh
-
-source /Users/kawakami/git-fuzzy
+export PATH="$HOME/git-fuzzy/bin:$PATH"
 source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+source .secrets
