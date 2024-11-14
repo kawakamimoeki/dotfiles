@@ -43,3 +43,6 @@ source ~/fzf-git.sh/fzf-git.sh
 export PATH="$HOME/git-fuzzy/bin:$PATH"
 source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 source .secrets
+alias dj="ddgr -n 5 -r jp-jp"
+alias de="ddgr -n 5 -r us-en"
+alias r="ranger ."
