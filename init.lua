@@ -9,6 +9,16 @@ vim.opt.laststatus = 3
 vim.cmd("language en_US")
 vim.opt.autowrite = true
 vim.opt.autowriteall = true
+vim.opt.list = true
+vim.opt.listchars = {
+      space = ' ',
+      tab = '  ',      
+      trail = '·',
+      extends = ' ',
+      precedes = ' ',
+      nbsp = ' '
+}
+
 
 -- イベントベースの自動保存
 vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
@@ -119,7 +129,7 @@ local plugins = {
 		lazy = false,
 		version = false, -- set this if you want to always pull the latest change
 		opts = {
-      hints = { enabled = false }
+			hints = { enabled = false },
 			-- add any opts here
 		},
 		-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
