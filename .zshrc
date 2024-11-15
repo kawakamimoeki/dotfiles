@@ -46,3 +46,7 @@ source ~/.secrets
 alias dj="ddgr -n 5 -r jp-jp"
 alias de="ddgr -n 5 -r us-en"
 alias r="ranger ."
+alias ail="ls -t | head -1 | xargs nvim"
+alias ain="touch $(date +ai-%Y-%m-%d--%H-%M-%S.md); ls -t | head -1 | xargs nvim"
+alias n="nvim"
+alias safari="open -a Safari"

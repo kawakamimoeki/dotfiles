@@ -11,14 +11,13 @@ vim.opt.autowrite = true
 vim.opt.autowriteall = true
 vim.opt.list = true
 vim.opt.listchars = {
-      space = ' ',
-      tab = '  ',      
-      trail = '·',
-      extends = ' ',
-      precedes = ' ',
-      nbsp = ' '
+	space = " ",
+	tab = "  ",
+	trail = "·",
+	extends = " ",
+	precedes = " ",
+	nbsp = " ",
 }
-
 
 -- イベントベースの自動保存
 vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
@@ -314,6 +313,7 @@ local plugins = {
 							"yaml",
 							"markdown",
 							"graphql",
+							"ruby",
 						},
 					}),
 				},
@@ -332,6 +332,7 @@ local plugins = {
 					"*.json",
 					"*.md",
 					"*.lua",
+					"*.rb",
 				},
 				callback = function()
 					vim.lsp.buf.format()
@@ -370,6 +371,11 @@ local plugins = {
 			"williamboman/mason-lspconfig.nvim",
 			"hrsh7th/cmp-nvim-lsp",
 		},
+		option = {
+			markdown_oxide = {
+				keyword_pattern = [[\(\k\| \|\/\|#\)\+]],
+			},
+		},
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
@@ -399,6 +405,33 @@ local plugins = {
 			})
 			require("lspconfig").ts_ls.setup({
 				capabilities = capabilities,
+				on_attach = function(client, bufnr)
+					local opts = { noremap = true, silent = true, buffer = bufnr }
+					vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+					vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+					vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+					vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+					vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
+					vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, opts)
+					vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+				end,
+			})
+			-- An example nvim-lspconfig capabilities setting
+			local capabilities =
+				require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+			require("lspconfig").markdown_oxide.setup({
+				-- Ensure that dynamicRegistration is enabled! This allows the LS to take into account actions like the
+				-- Create Unresolved File code action, resolving completions for unindexed code blocks, ...
+				root_dir = require("lspconfig.util").root_pattern(".git", ".marksman.toml"),
+				capabilities = vim.tbl_deep_extend("force", capabilities, {
+					workspace = {
+						didChangeWatchedFiles = {
+							dynamicRegistration = true,
+						},
+					},
+				}),
 				on_attach = function(client, bufnr)
 					local opts = { noremap = true, silent = true, buffer = bufnr }
 					vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
