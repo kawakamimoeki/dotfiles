@@ -17,11 +17,6 @@ function login-bastion-production() {
   AWS_PROFILE=production aws ssm start-session --target ${INSTANCE_ID}
 }
 
-source ~/antigen.zsh
-
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle rupa/z z.sh
 
 eval "$(starship init zsh)"
 
@@ -39,8 +34,7 @@ export PATH="$HOME/.nodenv/bin:$PATH"
 alias firefox="/Applications/Firefox.app/Contents/MacOS/firefox"
 eval "$(nodenv init -)"
 source <(fzf --zsh)
-source ~/fzf-git.sh/fzf-git.sh
-export PATH="$HOME/git-fuzzy/bin:$PATH"
+export PATH="$HOME/.config/git-fuzzy/bin:$PATH"
 source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 source ~/.secrets
 alias dj="ddgr -n 5 -r jp-jp"
@@ -50,3 +44,9 @@ alias ail="ls -t | head -1 | xargs nvim"
 alias ain="touch $(date +ai-%Y-%m-%d--%H-%M-%S.md); ls -t | head -1 | xargs nvim"
 alias n="nvim"
 alias safari="open -a Safari"
+
+source /opt/homebrew/share/antigen/antigen.zsh
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle rupa/z z.sh
+
