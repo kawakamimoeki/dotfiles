@@ -6,7 +6,7 @@ vim.opt.number = true
 vim.opt.clipboard = "unnamedplus"
 vim.g.mapleader = " "
 vim.opt.laststatus = 3
-vim.cmd("language en_US")
+vim.cmd("language en_US.UTF-8")
 vim.opt.autowrite = true
 vim.opt.autowriteall = true
 vim.opt.list = true
@@ -123,43 +123,8 @@ local plugins = {
 	{ "cohama/lexima.vim" },
 	{ "numToStr/Comment.nvim" },
 	{
-		"yetone/avante.nvim",
-		event = "VeryLazy",
-		lazy = false,
-		version = false, -- set this if you want to always pull the latest change
-		opts = {
-			hints = { enabled = false },
-			-- add any opts here
-		},
-		-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-		build = "make",
-		-- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-			"stevearc/dressing.nvim",
-			"nvim-lua/plenary.nvim",
-			"MunifTanjim/nui.nvim",
-			--- The below dependencies are optional,
-			"nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-			"zbirenbaum/copilot.lua", -- for providers='copilot'
-			{
-				-- support for image pasting
-				"HakonHarnes/img-clip.nvim",
-				event = "VeryLazy",
-				opts = {
-					-- recommended settings
-					default = {
-						embed_image_as_base64 = false,
-						prompt_for_file_name = false,
-						drag_and_drop = {
-							insert_mode = true,
-						},
-						-- required for Windows users
-						use_absolute_path = true,
-					},
-				},
-			},
-		},
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 	},
 	{
 		"FabijanZulj/blame.nvim",
@@ -387,6 +352,7 @@ local plugins = {
 				root_dir = require("lspconfig.util").root_pattern(".git", ".marksman.toml"),
 			})
 			require("lspconfig").rubocop.setup({})
+			require("lspconfig").tailwindcss.setup({})
 			require("lspconfig").solargraph.setup({
 				capabilities = capabilities,
 				filetypes = { "ruby" },
@@ -504,3 +470,4 @@ configs.setup({
 })
 vim.opt.termguicolors = true
 vim.opt.background = "dark"
+require('lualine').setup()
